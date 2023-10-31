@@ -1,3 +1,119 @@
 li:active {
     background-color: aquamarine;
 }
+
+
+# pattern commanda
+class Command:
+    def __init__(self):
+        self.__file_list = []
+        self.__history = []
+        self.__COMMAND_MAP = {
+            'add': self.__add_file,
+            'del': self.__del_file,
+            'print': self.__print_history,
+        }
+
+
+# del, add, print
+    def execute(self, command, argument = ''):
+        if command not in self.__COMMAND_MAP:
+            raise KeyError(f'Command {command} do not supported')
+
+        if command != 'print':
+            self.__COMMAND_MAP[command](argument)
+        else:
+            self.__COMMAND_MAP[command]()
+
+    def __add_file(self, file_name):
+        if not file_name:
+            raise ValueError('Не передано имя файла')
+
+        if file_name in self.__file_list:
+            raise ValueError(f'Файл {file_name} уже присутствует в списке')
+
+        self.__file_list.append((file_name))
+        self.__history.append(f'Файл "{file_name}" добавлен в список')
+
+    def __del_file(self, file_name):
+        if not file_name:
+            raise ValueError('Не передано имя файла')
+
+        if file_name not in self.__file_list:
+            raise ValueError(f'Файл {file_name} отсутствует в списке')
+
+        self.__file_list.remove((file_name))
+        self.__history.append(f'Файл "{file_name}" удален из списка')
+
+    def __print_history(self):
+        for item in self.__history:
+            print(item)
+
+
+
+cm = Command()
+
+cm.execute('add','ab123')
+cm.execute('add','qwe')
+cm.execute('del','qwe')
+cm.execute('print')
+
+
+class Coffe:
+    __INGREDIENT = ['water', 'coffe']
+    __COST_MAP = {
+        'water': 4,
+        'coffe': 10,
+        'milk': 6,
+        'syrup': 20,
+        'cinamon': 15,
+        'sugar':1
+    }
+    def __init__(self):
+        self.__ingridients = [*self.__INGREDIENT]
+
+    def add_milk(self):
+        self.__ingridients.append('milk')
+        return self
+
+    def add_sugar(self):
+        self.__ingridients.append('sugar')
+        return self
+    def add_syrup(self):
+        self.__ingridients.append('syrup')
+        return self
+    def add_cinamon(self):
+        self.__ingridients.append('cinamon')
+        return self
+    def print(self):
+        print(f'Your coffee consist of: {", ".join(self.__ingridients)}')
+        return self
+
+    def print_price(self):
+        price = 0
+
+        for item in self.__ingridients:
+            price += self.__COST_MAP[item]
+
+        print(f'Price your coffe: {price} $')
+
+        return self
+    # @
+
+
+
+
+
+
+cf = Coffe()
+cf.add_syrup()
+cf.add_syrup()
+cf.add_sugar()
+
+cf.add_syrup().add_cinamon().print().add_sugar().add_milk().add_cinamon()
+cf.print_price()
+
+
+cf.print()
+
+            
